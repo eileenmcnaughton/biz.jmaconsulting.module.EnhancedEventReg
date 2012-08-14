@@ -1,0 +1,7 @@
+name = Enhanced CiviCRM Event Registration
+description = This module allows a parent to register their children for events, and create contacts and relationships with spouse and emergency contacts.
+dependencies[] = civicrm
+package = Other
+core = 7.x
+
+
