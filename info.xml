@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+ <extension key="biz.jmaconsulting.EnhancedEventReg" type="module">
+  <downloadUrl>http://svn.civicrm.org/tools/branches/v4.1/extensions/biz.jmaconsulting.EnhancedEventReg.zip</downloadUrl>
+  <file>EnhancedEventReg</file>
+  <name>Enhanced Event Registration</name>
+  <description>This extension enhances Event Registration so that multiple contacts and the relationships between them can be  entered by user during registration.</description>
+  <urls>
+    <url desc="Main Extension Page">http://civicrm.org</url>
+    <url desc="Support">http://forum.civicrm.org</url>
+    <url desc="Licensing">http://civicrm.org/licensing</url>
+  </urls>
+  <license>AGPL</license>
+  <maintainer>
+    <author>JMA Consulting</author>
+    <email>joe.murray@jmaconsulting.biz</email>
+  </maintainer>
+  <releaseDate>2012-06-11</releaseDate>
+  <version>0.2</version>
+  <develStage>beta</develStage>
+  <compatibility><ver>4.1.3</ver></compatibility>
+  <comments>For support, please post on the forums. (http://forum.civicrm.org)</comments>
+</extension>
