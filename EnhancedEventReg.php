@@ -72,14 +72,11 @@ function EnhancedEventReg_civicrm_buildForm( $formName, &$form  )  {
   if( $formName == 'CRM_Event_Form_Registration_AdditionalParticipant' ) {
     $is_enhanced = CRM_Core_DAO::singleValueQuery( "SELECT is_enhanced FROM civicrm_event_enhanced WHERE event_id = {$form->_eventId}" );
     if ( $is_enhanced ) {
-      $child = array( 'first_name', 'last_name', 'email-Primary' );
       foreach( $form->_fields as $fieldKey => $fieldValues ) {
-        if (in_array( $fieldKey, $child ) || strstr( $fieldKey , 'custom' )) {
           $partcipantCount = $form->getVar('_name');
           $pCount = explode('_', $partcipantCount);
           $fieldValues['groupTitle'] = $childName[$pCount[1]].' Child';
           $firstChild[$fieldKey] = $fieldValues;
-        }
       } 
       $form->assign( 'additionalCustomPre', $firstChild );
     }
@@ -168,46 +165,43 @@ function EnhancedEventReg_civicrm_buildForm( $formName, &$form  )  {
       $form->assign( 'customPost', $myFields );
 
       $form->buildCustom( 4 , 'customPre' ); 
-      $child = array( 'first_name', 'last_name', 'email-Primary' );
       $fields = CRM_Core_BAO_UFGroup::getFields( 4, false, CRM_Core_Action::ADD,
                                                  null , null, false, null,
                                                  false, null, CRM_Core_Permission::CREATE,
                                                  'field_name', true );
       foreach( $fields as $fieldKey => $fieldValues ) {
-        if (in_array( $fieldKey, $child ) || strstr( $fieldKey , 'custom' ) ) {
-          $form->_fields[$fieldKey]['groupTitle'] = 'First Child';
-          $firstChild[$fieldKey] = $form->_fields[$fieldKey];
-          $form->_elements[$form->_elementIndex[$fieldKey]]->_attributes['value'] = $contacts[0][$fieldKey]; 
-          if ( array_key_exists('multiple', $form->_elements[$form->_elementIndex[$fieldKey]]->_attributes) ) {
-            $form->_elements[$form->_elementIndex[$fieldKey]]->_values = $contacts[0][$fieldKey];
-          } else {
-            $form->_elements[$form->_elementIndex[$fieldKey]]->_values = array( $contacts[0][$fieldKey] );
-          }
+        $form->_fields[$fieldKey]['groupTitle'] = 'First Child';
+        $firstChild[$fieldKey] = $form->_fields[$fieldKey];
+        $form->_elements[$form->_elementIndex[$fieldKey]]->_attributes['value'] = $contacts[0][$fieldKey]; 
+        if ( array_key_exists('multiple', $form->_elements[$form->_elementIndex[$fieldKey]]->_attributes) ) {
+          $form->_elements[$form->_elementIndex[$fieldKey]]->_values = $contacts[0][$fieldKey];
+        } else {
+          $form->_elements[$form->_elementIndex[$fieldKey]]->_values = array( $contacts[0][$fieldKey] );
+        }
           
-          if ( array_key_exists('_elements', (array) $form->_elements[$form->_elementIndex[$fieldKey]]) ) {
-            foreach ($form->_elements[$form->_elementIndex[$fieldKey]]->_elements as $readioKey => $radioVal ) {
-              if ($radioVal->_type == 'radio' ) {
-                if ( $contacts[0][$fieldKey] == $readioKey+1 ) {
+        if ( array_key_exists('_elements', (array) $form->_elements[$form->_elementIndex[$fieldKey]]) ) {
+          foreach ($form->_elements[$form->_elementIndex[$fieldKey]]->_elements as $readioKey => $radioVal ) {
+            if ($radioVal->_type == 'radio' ) {
+              if ( $contacts[0][$fieldKey] == $readioKey+1 ) {
+                $form->_elements[$form->_elementIndex[$fieldKey]]->_elements[$readioKey]->_attributes['checked'] = 'checked';
+              } else {
+                $form->_elements[$form->_elementIndex[$fieldKey]]->_elements[$readioKey]->_attributes['checked'] = '';
+              }
+            }
+            if ($radioVal->_type == 'checkbox' ) {
+              if ( array_key_exists( $readioKey+1, $contacts[0][$fieldKey]) ) {
+                if ( !empty($contacts[0][$fieldKey][$readioKey+1]) ) {
                   $form->_elements[$form->_elementIndex[$fieldKey]]->_elements[$readioKey]->_attributes['checked'] = 'checked';
                 } else {
                   $form->_elements[$form->_elementIndex[$fieldKey]]->_elements[$readioKey]->_attributes['checked'] = '';
                 }
               }
-              if ($radioVal->_type == 'checkbox' ) {
-                if ( array_key_exists( $readioKey+1, $contacts[0][$fieldKey]) ) {
-                  if ( !empty($contacts[0][$fieldKey][$readioKey+1]) ) {
-                    $form->_elements[$form->_elementIndex[$fieldKey]]->_elements[$readioKey]->_attributes['checked'] = 'checked';
-                  } else {
-                    $form->_elements[$form->_elementIndex[$fieldKey]]->_elements[$readioKey]->_attributes['checked'] = '';
-                  }
-                }
-              } 
-            }
+            } 
           }
-          if ( $form->_elements[$form->_elementIndex[$fieldKey]]->_type == 'file' ) {
-            unset($form->_elements[$form->_elementIndex[$fieldKey]]);
-            unset($firstChild[$fieldKey]);
-          }
+        }
+        if ( $form->_elements[$form->_elementIndex[$fieldKey]]->_type == 'file' ) {
+          unset($form->_elements[$form->_elementIndex[$fieldKey]]);
+          unset($firstChild[$fieldKey]);
         }
       } 
       
@@ -385,17 +379,14 @@ function EnhancedEventReg_civicrm_buildForm( $formName, &$form  )  {
       $form->assign( 'customPost', $myFields );
       //$form->assign( 'customPost', $form->_fields );
       $form->buildCustom( 4 , 'customPre' );
-      $child = array( 'first_name', 'last_name', 'email-Primary' );
       $fields = CRM_Core_BAO_UFGroup::getFields( 4, false, CRM_Core_Action::ADD,
                                                  null , null, false, null,
                                                  false, null, CRM_Core_Permission::CREATE,
                                                  'field_name', true );
       
       foreach( $fields as $fieldKey => $fieldValues ) {
-        if (in_array( $fieldKey, $child ) || strstr( $fieldKey , 'custom' )) {
-          $form->_fields[$fieldKey]['groupTitle'] = 'First Child';
-          $firstChild[$fieldKey] = $form->_fields[$fieldKey];
-        }
+        $form->_fields[$fieldKey]['groupTitle'] = 'First Child';
+        $firstChild[$fieldKey] = $form->_fields[$fieldKey];
       } 
       $form->assign( 'customPre', $firstChild );
     } 
